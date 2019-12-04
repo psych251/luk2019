@@ -1,0 +1,312 @@
+---
+title: "Replication of Study 1 by Luk & Surrain (2019, *PsyArXiv Preprints*)"
+author: "Julian M. Siebert (jms312@stanford.edu)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
+
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+
+```
+
+
+<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report_S of the aggregate results. -->
+
+## Introduction
+
+<!-- [No abstract is needed.]  Each replication project will have a straightforward, no frills report of the study and results.  These reports will be publicly available as supplementary material for the aggregate report_S of the project as a whole.  Also, to maximize project integrity, the intro and methods will be written and critiqued in advance of data collection.  Introductions can be just 1-2 paragraphs clarifying the main idea of the original study, the target finding for replication, and any other essential information.  It will NOT have a literature review -- that is in the original publication. You can write both the introduction and the methods in past tense.   -->
+
+This project is a replication of Study 1 in [Luk and Surrain (2019)](https://github.com/psych251/luk2019/blob/master/original_paper/Surrain_Luk_Perceptions_of_Bilingualism_Scales_Combined.pdf).
+All relevant documentation can be found in [this](https://github.com/psych251/luk2019) GitHub repository.
+The authors developed a scale measuring the perception of bilingualism, the *13-item Perception of Bilingualism* scale (POB), and conducted psychometric analyses using both a classical test theory (CTT) and an item response theory (IRT) approach.
+The authors established unidimensionality of the POB scale using exploratory factor analysis (EFA; 80 % of variance explained by a single factor), yet a single-factor confirmatory analysis (CFA) produced insufficient model fit results ($\chi$^2^ (65) = 501.23) using multiple indices.
+In a graded response model, they flagged 3 out of 13 items as  uninformative.
+
+Further, using a multiple linear regression model, they showed that participants' language background is consistently predictive of POB score (on the final 10-item version), regardless of age, education, or sex.
+The direction of this observation confirmed their hypothesis that bilingulism is perceived more positively by individuals speaking more than one language themselves.
+
+This replication is important,
+(a) because it will solidify our knowledge about how bilingual inidividuals perceive their bilingual status and
+(b) because, to date, there is no reliable scale measuring how bilingualism is perceived by individuals.
+Obtaining this information can help inform policy and education and aids in assessing how successfuly the current state of research findings on multilingualism have been disseminated to the public.
+
+## Methods
+
+### Power Analysis
+
+<!-- Original effect size, power analysis for samples to achieve 80%, 90%, 95% power to detect that effect size.  Considerations of feasibility for selecting planned sample size. -->
+
+In the original study, multiple linear regression model *R^2^*s ranged from .15 in their simple-most model to .24 in a four-predictor model with interaction effect (Table 5 in the original report).
+Hence, for the replication of the regression analyses, to replicate a regression model with *R^2^* = .24, sample sizes of *N* = 47, 58, and 69 were needed to achieve statistical power of 80 %, 90 %, and 95 %, respectively.
+
+### Planned Sample
+The authors of the original paper recruited US-American participants via Qualtrics Panel and Amazon MechanicalTurk, *N* = 422.
+For the replication, all participants were be recruited using Amazon MechanicalTurk.
+The use of the same sampling frame increases the likelihood of obtaining similar sample characteristics.
+Given the power calculations in the previous section, the desired sample size for the regression anlaysis, after exclusions due to non-attention/comphrehension, was *N* = 70.
+In order to replicate the IRT analysis, however, a much larger sample would be needed--this was unfeasible under the current circumstances.
+
+<!-- Planned sample size and/or termination rule, sampling frame, known demographics if any, preselection rules if any. -->
+
+### Materials
+
+The replication made use of the same materials as the original study.
+The POB is available as part of the original paper.
+Though not the original demographic questionnaire, the current version of the survey did, nonetheless, cover all the demographic variables of interest.
+Materials are:
+
+* Perception of Bilingualism scale; Luk and Surrain (2019, pp. 12-13) described its development as follows: "An initial set of 13 items was developed based on our review of the literature, cognitive interviews, and input from members of the research team in our lab who have worked with linguistically diverse populations across the lifespan. The initial set of items [...] covered perceptions of whether speaking multiple languages in the U.S. should be acknowledged, accommodated, rewarded and supported; whether speaking multiple languages in the U.S. is needed and valued; and whether speaking multiple languages incurs personal benefits and costs. Several items were adapted from Baker’s Attitude to Bilingualism Scale (21) and Byrnes and Kiger’s Language Attitudes of Teachers Scale (LATS; 33,34). We chose to use a 6-point Likert scale from 1 (strongly disagree) to 6 (strongly agree) with no midpoint option elicit greater variability and discourage satisficing, or providing a response without expending the cognitive effort required to fully interpret and respond to each item". As per the authors' explicit concerns, the PoB will be available in both Spanish and English;
+* Demographic questionnaire;
+* Attention check item inserted inmidst the PoB.
+
+### Procedure	
+
+In [one combined Qualtrics survey](https://stanforduniversity.qualtrics.com/jfe/form/SV_6JCGO4RNc8oZ7Uh), participants will give informed consent to participation, complete the POB, interspersed with an attention check item, and respond to a basic set of questions about their demographics, educational attainment, and language background.
+In the original paper, median survey completion time was 13 minutes.
+Given that the replication focused on Part 1 of the original paper, which does neither require participants to complete the *Knowledge of infant development inventory* nor the PoB+, **I expected the survey to be completed in under 10 minutes**.
+
+### Analysis Plan
+
+The analysis plan for the regression analysis mirrors that of the orginal paper:
+All data from participants who failed the attention was excluded.
+I provided a descriptive overview showing demographic characteristics of the sample.
+Given the small sample size, I did not conduct the EFA, CFA, and IRT analyses.
+Correlations between POB scores, age, sex, language background, and years of education were explored and all predictors were entered into a multiple linear regression model, exactly as in the original paper.
+The key analysis of interest is the regression modelling Luk and Surrain presented in Table 5; I aimed to replicate their final model (model 5), which predicts PoB score from English-language status, years of education, age, sex, and a language x sex interaction with $R^2$ = .24, $F$(5, 416) = 26.23, $p$ < .001 ($p$ calculated myself).
+
+<!-- **Clarify key analysis of interest here**  You can also pre-specify additional analyses you plan to do. -->
+
+### Differences from Original Study
+
+While the original study recruited participants using both Qualtrics Panel and Amazon MechanicalTurk, the replication recruited only from the latter.
+Further, it was not possible to systematically oversample parents to guarantee a sufficiently large representation of parents of children exposed to both Spanish and English---as was the case in the original study.
+In light of the fact that Luk and Surrain did not provide results split by whether or not participants were parents, the effect this sampling difference produced is impossible to predict.
+Overall, the replication remained very close to the original study; hence, it was reasonable to expect very similar results.
+
+<!-- ### Methods Addendum (Post Data Collection)
+
+You can comment this section out prior to final report with data collection.
+
+
+#### Actual Sample
+Sample size, demographics, data exclusions based on rules spelled out in the analysis plan.
+
+#### Differences from pre-data collection methods plan
+  Any differences from what was described as the original plan, or “none”.
+-->
+
+## Results
+
+### Data preparation
+
+Data preparation followed the analysis plan outlined above, using the following R packages.
+
+```{r echo = TRUE}
+library(tidyverse)
+library(readr)
+library(ltm)
+library(psych)
+library(qualtRics) # requires devtools install 
+library(here) # requires devtools install 
+library(dplyr)
+library(table1)
+library(corrr)
+library(car)
+
+```
+
+First, I downloaded the Qualtrics survey results as a csv file, imported it into R, and deleted irrelevant variables.
+
+```{r}
+
+# import data from csv (Qualtrics output), in R-friendly format, i.e. without unneccessary header rows
+here()
+
+d1 <- readSurvey("data/luk2019_replication_pilotdata.csv")
+
+# drop irrelevant Qualtrics variables
+d1 <- d1 %>%
+  dplyr::select(-c(StartDate, EndDate, Status, RecordedDate, RecipientFirstName, RecipientLastName, RecipientEmail, ExternalReference, Finished, DistributionChannel))
+```
+
+Next, I evaluated the attention checks, recod them as 1 when passed and 0 when failed. I then excluded all participants who did not pass the attention check.
+
+```{r}
+
+d2 <- d1 %>%
+  filter(AttentionCheck == "Strongly disagree" | AttentionCheck_S == "Totalmente en desacuerdo") %>%
+  mutate(AttentionCheck = ifelse(AttentionCheck == "Strongly disagree", 1, ifelse(AttentionCheck_S == "Totalmente en desacuerdo", 1,0))) %>%
+  dplyr::select(-c(AttentionCheck_S))
+
+d2 <- d2 %>% # move attention check variable to end of dataset
+  dplyr::select(-AttentionCheck, everything())
+
+```
+
+Then, I created a dummy variable for monolingual English status and renamed the PoB score variable to Total_PoB13.
+
+```{r}
+  
+# create variable "EO" (L1 English, no L2)
+d2 <- d2 %>%
+  mutate(EO = if_else(L1 == "English", if_else(L2 == "I do not speak a second language.", 1, 0), 0))
+
+# rename SC0 to PoB13_Total
+d2 <- d2 %>%
+  mutate(Total_PoB13 = SC0) %>%
+  dplyr::select(-SC0)
+```
+
+Then, I recoded PoB responses from string variables (labels on the Likert scale) to numerics (1-6).
+For this, I temporarily gathered the data, then spread it again, thereafter.
+Further, given that participants completed the PoB in either English or Spanish, I unified responses to the English and Spanish PoB scales into one variable.
+*Lg_decision*, the variable indicating the language in which the survey was taken was retained.
+
+```{r}
+
+d2 <- d2 %>%
+  pivot_longer(cols = starts_with("PoB"), names_to = "PoB_Item", values_to = "response")
+
+# converting character responses (Likert categories) to numeric
+d2$response <- recode(d2$response,"'Strongly agree' = 6; 'Totalmente de acuerdo' = 6; 'Agree' = 5; 'De acerdo' = 5; 'Somewhat agree' = 4; 'Parcialmente de acuerdo' = 4; 'Somewhat disagree' = 3; 'Parcialmente en desacuerdo' = 3; 'Disagree' = 2; 'En desacuerdo' = 2; 'Strongly disagree' = 1; 'Totalmente en desacuerdo' = 1")
+
+d2 <- d2 %>%
+  pivot_wider(names_from = "PoB_Item", values_from = "response")
+
+# creating new unified variables for PoB responses (regardless of response language)
+d2 <- d2 %>%
+  mutate(PoB_1 = ifelse(Lg_decision == "Español", PoB1_S, PoB1_E),
+         PoB_2 = ifelse(Lg_decision == "Español", PoB2_S, PoB2_E),
+         PoB_4 = ifelse(Lg_decision == "Español", PoB4_S, PoB4_E),
+         PoB_6 = ifelse(Lg_decision == "Español", PoB6_S, PoB6_E),
+         PoB_7 = ifelse(Lg_decision == "Español", PoB7_S, PoB7_E),
+         PoB_8 = ifelse(Lg_decision == "Español", PoB8_S, PoB8_E),
+         PoB_9 = ifelse(Lg_decision == "Español", PoB9_S, PoB9_E),
+         PoB_10 = ifelse(Lg_decision == "Español", PoB10_S, PoB10_E),
+         PoB_12 = ifelse(Lg_decision == "Español", PoB12_S, PoB12_E),
+         PoB_13 = ifelse(Lg_decision == "Español", PoB13_S, PoB13_E))
+
+# removing old PoB response columns
+d2 <- d2 %>%
+  dplyr::select(-contains("_S")) %>%
+  dplyr::select(-contains("_E"))
+  
+```
+
+I computed a new PoB score variable (PoB10_Total), denoting the total score a shortened version of the PoB, which Luk and Surrain determined to have improved psychometric properties and which they used for subsequent analyses.
+
+```{r}
+# compute new PoB10_Total
+d2 <- d2 %>%
+  mutate(PoB10_Total = PoB_1 + PoB_2 + PoB_4 + PoB_6 + PoB_7 + PoB_8 + PoB_9 + PoB_10 + PoB_12 + PoB_13)
+
+```
+
+After data cleaning, the resultant dataframe (d2) contains some session information, participants' PoB scores, age, sex, language background, and years of education, as well as their responses to the linguistic profile questionnaire.
+
+```{r}
+
+head(d2)
+
+```
+
+### Confirmatory analysis
+
+Sample descriptives and between-groups differences were displayed using the *table1* package.
+
+```{r}
+
+# Sample descriptives 
+table1::table1(~Age + Sex + Birthplace + Education + Ethnicity, data = d2)
+
+```
+
+All confirmatory analyses are specified in the analysis plan (see section *Analysis Plan*).
+Following a correlations table, the main analysis is a multiple linear regression, carried out using the *lm* function.
+Luk and Surrain's (2019) final model will be replicated as per the below (building all models as in the original paper, with a focus on the last model, fit5).
+Prior to the model building, however, I converted the variable *Sex* into numeric format (female = 1) and centered *Age* at the mean (as the Luk & Surrain did).
+
+```{r}
+
+# creating new variable, centering age at the mean
+d2 <- d2 %>%
+  mutate(age_centered = Age - 37)
+
+# changing Sex to numeric with Female = 1 
+d2 <- d2 %>%
+  mutate(Sex = if_else(Sex == "Female", 1, 0))
+
+# prepration for correlation tables
+# creating separate df for correlations_data
+correlations_data <- d2 %>%
+  dplyr::select(c(PoB10_Total, EO, age_centered, Sex, Education_y))
+
+# creating & showing cor_df
+correlations <- corrr::correlate(correlations_data)
+correlations
+
+# Multiple linear regression predicting PoB score from same demograhpic and linguistic variables as in original paper
+
+# fit1 predictors: EO
+# fit2 predictors: EO, Education_y
+# fit3 predictors: EO, Education_y, age 
+# fit4 predictors: EO, Education_y, age, sex,
+# fit4 predictors: EO, Education_y, age, sex, parent
+# fit5 predictors: EO, Education_y, age, sex, parent, age*sex
+
+fit1 <- lm(PoB10_Total ~ EO, data=d2)
+fit2 <- lm(PoB10_Total ~ EO + Education_y, data=d2)
+fit3 <- lm(PoB10_Total ~ EO + Education_y + age_centered, data=d2)
+fit4 <- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex, data=d2)
+fit5 <- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex + age_centered*Sex, data=d2)
+
+summary(fit1)
+summary(fit2)
+summary(fit3)
+summary(fit4)
+summary(fit5)
+
+```
+
+<!-- 
+
+*Side-by-side graph with original graph is ideal here*
+
+###Exploratory analyses
+
+Any follow-up analyses desired (not required).  
+
+```{r}
+
+
+  
+
+
+```
+
+## Discussion
+
+### Summary of Replication Attempt
+
+Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+
+ -->
+ 
