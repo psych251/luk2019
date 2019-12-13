@@ -12,7 +12,7 @@
 
 <meta name="author" content="Julian M. Siebert (jms312@stanford.edu)" />
 
-<meta name="date" content="2019-12-04" />
+<meta name="date" content="2019-12-13" />
 
 <title>Replication of Study 1 by Luk &amp; Surrain (2019, PsyArXiv Preprints)</title>
 
@@ -1513,7 +1513,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Replication of Study 1 by Luk &amp; Surrain (2019, <em>PsyArXiv Preprints</em>)</h1>
 <h4 class="author">Julian M. Siebert (<a href="mailto:jms312@stanford.edu" class="email">jms312@stanford.edu</a>)</h4>
-<h4 class="date">December 04, 2019</h4>
+<h4 class="date">December 13, 2019</h4>
 
 </div>
 
@@ -1558,18 +1558,18 @@ div.tocify {
 </div>
 <div id="differences-from-original-study" class="section level3">
 <h3>Differences from Original Study</h3>
-<p>While the original study recruited participants using both Qualtrics Panel and Amazon MechanicalTurk, the replication recruited only from the latter. Further, it was not possible to systematically oversample parents to guarantee a sufficiently large representation of parents of children exposed to both Spanish and English—as was the case in the original study. In light of the fact that Luk and Surrain did not provide results split by whether or not participants were parents, the effect this sampling difference produced is impossible to predict. Overall, the replication remained very close to the original study; hence, it was reasonable to expect very similar results.</p>
-<!-- ### Methods Addendum (Post Data Collection)
-
-You can comment this section out prior to final report with data collection.
-
-
-#### Actual Sample
-Sample size, demographics, data exclusions based on rules spelled out in the analysis plan.
-
-#### Differences from pre-data collection methods plan
-  Any differences from what was described as the original plan, or “none”.
--->
+<p>While the original study recruited participants using both Qualtrics Panel and Amazon MechanicalTurk, the replication recruited only from the latter. Further, it was not possible to systematically oversample parents to guarantee a sufficiently large representation of parents of children exposed to both Spanish and English—as was the case in the original study. Years of education (<code>Education_y</code>) is a self-reported item in the replication, wherease Luk and Surrain manually recoded self-reported highest level of education to the approximately equivalent number of years. In light of the fact that Luk and Surrain did not provide results split by whether or not participants were parents, the effect this sampling difference produced is impossible to predict. Overall, the replication remained very close to the original study; hence, it was reasonable to expect very similar results.</p>
+</div>
+<div id="methods-addendum-post-data-collection" class="section level3">
+<h3>Methods Addendum (Post Data Collection)</h3>
+<div id="actual-sample" class="section level4">
+<h4>Actual Sample</h4>
+<p>The final sample for this analysis comprised 66 individuals (24 women, 42 men), aged between 18 and 69 years (<span class="math inline">\(M\)</span> = 37.00, <span class="math inline">\(SD\)</span> = 12.30). The majority of participants was white (76 %), born in the US (87 %) , and had at least some tertiary education (83 %). A table with a detailed sample description can be found in the <a href="#confirmatory-analysis">confirmatory analysis section</a>.</p>
+</div>
+<div id="differences-from-pre-data-collection-methods-plan" class="section level4">
+<h4>Differences from pre-data collection methods plan</h4>
+<p>No changes were made to the data collection process or general analysis plan. However, I made some minor cosmetic changes to the presentation of regression models and added some lines of code to convert the demographic variables into appropriate formats (e.g. sex from numeric into factor). None of these changes influence the outcomes of the preregistered confirmatory analyses.</p>
+</div>
 </div>
 </div>
 <div id="results" class="section level2">
@@ -1577,66 +1577,25 @@ Sample size, demographics, data exclusions based on rules spelled out in the ana
 <div id="data-preparation" class="section level3">
 <h3>Data preparation</h3>
 <p>Data preparation followed the analysis plan outlined above, using the following R packages.</p>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(readr)
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(ltm)
+library(psych)
+library(qualtRics) # requires devtools install 
+library(here) # requires devtools install 
+library(dplyr)
+library(table1)
+library(corrr)
+library(car)
+library(kableExtra)
+library(sjPlot)
+library(htmltools)
+library(stargazer)
 library(ltm)</code></pre>
-<pre><code>## Loading required package: MASS</code></pre>
-<pre><code>## 
-## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre><code>## Loading required package: msm</code></pre>
-<pre><code>## Loading required package: polycor</code></pre>
-<pre class="r"><code>library(psych)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;psych&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ltm&#39;:
-## 
-##     factor.scores</code></pre>
-<pre><code>## The following object is masked from &#39;package:polycor&#39;:
-## 
-##     polyserial</code></pre>
-<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
-## 
-##     %+%, alpha</code></pre>
-<pre class="r"><code>library(qualtRics) # requires devtools install 
-library(here) # requires devtools install </code></pre>
-<pre><code>## here() starts at /Users/juliansiebert/Documents/Stanford/Academics/PSYCH251/luk2019</code></pre>
-<pre class="r"><code>library(dplyr)
-library(table1)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;table1&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     units, units&lt;-</code></pre>
-<pre class="r"><code>library(corrr)
-library(car)</code></pre>
-<pre><code>## Loading required package: carData</code></pre>
-<pre><code>## 
-## Attaching package: &#39;car&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:psych&#39;:
-## 
-##     logit</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     recode</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     some</code></pre>
-<p>First, I downloaded the Qualtrics survey results as a csv file, imported it into R, and deleted irrelevant variables.</p>
+<p>First, I downloaded the Qualtrics survey results as a csv file, stripped columns containing sensitive information, such as IP addresses and location data; then I imported it into R and deleted other irrelevant survey metadata variables.</p>
 <pre class="r"><code># import data from csv (Qualtrics output), in R-friendly format, i.e. without unneccessary header rows
-here()</code></pre>
-<pre><code>## [1] &quot;/Users/juliansiebert/Documents/Stanford/Academics/PSYCH251/luk2019&quot;</code></pre>
-<pre class="r"><code>d1 &lt;- readSurvey(&quot;data/luk2019_replication_pilotdata.csv&quot;)</code></pre>
+here()
+d1 &lt;- readSurvey(&quot;data/luk2019_replication_anonymous.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_character(),
@@ -1660,13 +1619,13 @@ here()</code></pre>
 ##   PoB9_S = col_logical(),
 ##   PoB10_S = col_logical(),
 ##   PoB12_S = col_logical()
-##   # ... with 7 more columns
+##   # ... with 5 more columns
 ## )</code></pre>
 <pre><code>## See spec(...) for full column specifications.</code></pre>
 <pre class="r"><code># drop irrelevant Qualtrics variables
 d1 &lt;- d1 %&gt;%
   dplyr::select(-c(StartDate, EndDate, Status, RecordedDate, RecipientFirstName, RecipientLastName, RecipientEmail, ExternalReference, Finished, DistributionChannel))</code></pre>
-<p>Next, I evaluated the attention checks, recod them as 1 when passed and 0 when failed. I then excluded all participants who did not pass the attention check.</p>
+<p>Next, I evaluated the attention checks, recoded them as 1 when passed and 0 when failed. I then excluded all participants who did not pass the attention check.</p>
 <pre class="r"><code>d2 &lt;- d1 %&gt;%
   filter(AttentionCheck == &quot;Strongly disagree&quot; | AttentionCheck_S == &quot;Totalmente en desacuerdo&quot;) %&gt;%
   mutate(AttentionCheck = ifelse(AttentionCheck == &quot;Strongly disagree&quot;, 1, ifelse(AttentionCheck_S == &quot;Totalmente en desacuerdo&quot;, 1,0))) %&gt;%
@@ -1715,118 +1674,142 @@ d2 &lt;- d2 %&gt;%
 d2 &lt;- d2 %&gt;%
   mutate(PoB10_Total = PoB_1 + PoB_2 + PoB_4 + PoB_6 + PoB_7 + PoB_8 + PoB_9 + PoB_10 + PoB_12 + PoB_13)</code></pre>
 <p>After data cleaning, the resultant dataframe (d2) contains some session information, participants’ PoB scores, age, sex, language background, and years of education, as well as their responses to the linguistic profile questionnaire.</p>
-<pre class="r"><code>head(d2)</code></pre>
-<pre><code>## # A tibble: 2 x 32
-##   Progress `Duration (in s… UserLanguage Consent Lg_decision L1   
-##      &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;
-## 1      100               83 EN           I wish… English     Engl…
-## 2      100              129 EN           I wish… English     Span…
-## # … with 26 more variables: L1_2_TEXT &lt;lgl&gt;, L2 &lt;chr&gt;, L2_3_TEXT &lt;chr&gt;,
-## #   Education &lt;chr&gt;, Education_y &lt;dbl&gt;, Age &lt;dbl&gt;, Birthplace &lt;chr&gt;,
-## #   Birthplace_2_TEXT &lt;lgl&gt;, Ethnicity &lt;chr&gt;, Sex &lt;chr&gt;, Q44 &lt;chr&gt;,
-## #   `Random ID` &lt;dbl&gt;, AttentionCheck &lt;dbl&gt;, EO &lt;dbl&gt;, Total_PoB13 &lt;dbl&gt;,
-## #   PoB_1 &lt;dbl&gt;, PoB_2 &lt;dbl&gt;, PoB_4 &lt;dbl&gt;, PoB_6 &lt;dbl&gt;, PoB_7 &lt;dbl&gt;,
-## #   PoB_8 &lt;dbl&gt;, PoB_9 &lt;dbl&gt;, PoB_10 &lt;dbl&gt;, PoB_12 &lt;dbl&gt;, PoB_13 &lt;dbl&gt;,
-## #   PoB10_Total &lt;dbl&gt;</code></pre>
 </div>
 <div id="confirmatory-analysis" class="section level3">
 <h3>Confirmatory analysis</h3>
 <p>Sample descriptives and between-groups differences were displayed using the <em>table1</em> package.</p>
-<pre class="r"><code># Sample descriptives 
+<pre class="r"><code>label(d2[[&quot;Age&quot;]]) &lt;- &quot;Age in years&quot;
+label(d2[[&quot;Sex&quot;]]) &lt;- &quot;Sex (Female = 1)&quot;
+label(d2[[&quot;Birthplace&quot;]]) &lt;- &quot;Birthplace&quot;
+label(d2[[&quot;Ethnicity&quot;]]) &lt;- &quot;Ethnicity&quot;
+label(d2[[&quot;Education&quot;]]) &lt;- &quot;Highest educational level&quot;
+
+# Sample descriptives 
 table1::table1(~Age + Sex + Birthplace + Education + Ethnicity, data = d2)</code></pre>
 <div class="Rtable1"><table class="Rtable1">
 <thead>
 <tr>
 <th class='rowlabel firstrow lastrow'></th>
-<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(n=2)</span></span></th>
+<th class='firstrow lastrow'><span class='stratlabel'>Overall<br><span class='stratn'>(n=66)</span></span></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class='rowlabel firstrow'><span class='varlabel'>28</span></td>
+<td class='rowlabel firstrow'><span class='varlabel'>Age in years</span></td>
 <td class='firstrow'></td>
 </tr>
 <tr>
 <td class='rowlabel'>Mean (SD)</td>
-<td>28.5 (4.95)</td>
+<td>37.0 (12.3)</td>
 </tr>
 <tr>
 <td class='rowlabel lastrow'>Median [Min, Max]</td>
-<td class='lastrow'>28.5 [25.0, 32.0]</td>
+<td class='lastrow'>34.5 [18.0, 69.0]</td>
 </tr>
 <tr>
-<td class='rowlabel firstrow'><span class='varlabel'>Male</span></td>
+<td class='rowlabel firstrow'><span class='varlabel'>Sex (Female = 1)</span></td>
 <td class='firstrow'></td>
+</tr>
+<tr>
+<td class='rowlabel'>Female</td>
+<td>24 (36.4%)</td>
 </tr>
 <tr>
 <td class='rowlabel lastrow'>Male</td>
-<td class='lastrow'>2 (100%)</td>
+<td class='lastrow'>42 (63.6%)</td>
 </tr>
 <tr>
-<td class='rowlabel firstrow'><span class='varlabel'>In the US</span></td>
+<td class='rowlabel firstrow'><span class='varlabel'>Birthplace</span></td>
 <td class='firstrow'></td>
 </tr>
 <tr>
-<td class='rowlabel lastrow'>In the US</td>
-<td class='lastrow'>2 (100%)</td>
+<td class='rowlabel'>In the US</td>
+<td>58 (87.9%)</td>
 </tr>
 <tr>
-<td class='rowlabel firstrow'><span class='varlabel'>Graduate school degree</span></td>
+<td class='rowlabel'>Outside the US, please specify:</td>
+<td>7 (10.6%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Missing</td>
+<td class='lastrow'>1 (1.5%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'><span class='varlabel'>Highest educational level</span></td>
 <td class='firstrow'></td>
 </tr>
 <tr>
 <td class='rowlabel'>College graduate</td>
-<td>1 (50.0%)</td>
+<td>25 (37.9%)</td>
 </tr>
 <tr>
-<td class='rowlabel lastrow'>Some high school or less</td>
-<td class='lastrow'>1 (50.0%)</td>
+<td class='rowlabel'>Graduate school degree</td>
+<td>12 (18.2%)</td>
 </tr>
 <tr>
-<td class='rowlabel firstrow'><span class='varlabel'>White alone (not Hispanic)</span></td>
+<td class='rowlabel'>High school graduate</td>
+<td>11 (16.7%)</td>
+</tr>
+<tr>
+<td class='rowlabel lastrow'>Some college or ass. degree</td>
+<td class='lastrow'>18 (27.3%)</td>
+</tr>
+<tr>
+<td class='rowlabel firstrow'><span class='varlabel'>Ethnicity</span></td>
 <td class='firstrow'></td>
 </tr>
 <tr>
+<td class='rowlabel'>Asian or Pacific Islander</td>
+<td>4 (6.1%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Black</td>
+<td>5 (7.6%)</td>
+</tr>
+<tr>
 <td class='rowlabel'>Hispanic</td>
-<td>1 (50.0%)</td>
+<td>4 (6.1%)</td>
+</tr>
+<tr>
+<td class='rowlabel'>Mixed race or other</td>
+<td>3 (4.5%)</td>
 </tr>
 <tr>
 <td class='rowlabel lastrow'>White alone (not Hispanic)</td>
-<td class='lastrow'>1 (50.0%)</td>
+<td class='lastrow'>50 (75.8%)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>All confirmatory analyses are specified in the analysis plan (see section <em>Analysis Plan</em>). Following a correlations table, the main analysis is a multiple linear regression, carried out using the <em>lm</em> function. Luk and Surrain’s (2019) final model will be replicated as per the below (building all models as in the original paper, with a focus on the last model, fit5). Prior to the model building, however, I converted the variable <em>Sex</em> into numeric format (female = 1) and centered <em>Age</em> at the mean (as the Luk &amp; Surrain did).</p>
+<p>All confirmatory analyses are specified in the analysis plan (see section <em>Analysis Plan</em>). Following a correlations table, the main analysis is a multiple linear regression, carried out using the <em>lm</em> function. Luk and Surrain’s (2019) final model were replicated as per the below (building all models as in the original paper, with a focus on the last model, fit5). Prior to the model building, however, I converted the variable <em>Sex</em> into numeric format (female = 1) and centered <em>Age</em> at the mean (as the Luk &amp; Surrain did).</p>
 <pre class="r"><code># creating new variable, centering age at the mean
 d2 &lt;- d2 %&gt;%
-  mutate(age_centered = Age - 37)
+  mutate(age_centered = Age - mean(Age))
 
 # changing Sex to numeric with Female = 1 
 d2 &lt;- d2 %&gt;%
-  mutate(Sex = if_else(Sex == &quot;Female&quot;, 1, 0))
-
-# prepration for correlation tables
+  mutate(Sex = if_else(Sex == &quot;Female&quot;, 1, 0))</code></pre>
+<p>A quick look at the correlations table shows a pattern very similar to that in the original study (see Table 4 in Luk and Surrain, 2019). Being older and being a monolingual English-speaker are negatively related to PoB scores; higher levels of education and being female are positive related to PoB scores.</p>
+<pre class="r"><code># prepration for correlation tables
 # creating separate df for correlations_data
 correlations_data &lt;- d2 %&gt;%
-  dplyr::select(c(PoB10_Total, EO, age_centered, Sex, Education_y))
+  dplyr::select(c(PoB10_Total, EO, Age, Sex, Education_y))
 
 # creating &amp; showing cor_df
 correlations &lt;- corrr::correlate(correlations_data)</code></pre>
-<pre><code>## Warning in stats::cor(x = x, y = y, use = use, method = method): the
-## standard deviation is zero</code></pre>
 <pre><code>## 
 ## Correlation method: &#39;pearson&#39;
 ## Missing treated using: &#39;pairwise.complete.obs&#39;</code></pre>
 <pre class="r"><code>correlations</code></pre>
 <pre><code>## # A tibble: 5 x 6
-##   rowname      PoB10_Total    EO age_centered   Sex Education_y
-##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;
-## 1 PoB10_Total           NA    NA            1    NA          -1
-## 2 EO                    NA    NA           NA    NA          NA
-## 3 age_centered           1    NA           NA    NA          -1
-## 4 Sex                   NA    NA           NA    NA          NA
-## 5 Education_y           -1    NA           -1    NA          NA</code></pre>
+##   rowname     PoB10_Total     EO    Age      Sex Education_y
+##   &lt;chr&gt;             &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1 PoB10_Total    NA       -0.125 -0.247  0.0997      0.00129
+## 2 EO             -0.125   NA      0.138  0.113      -0.271  
+## 3 Age            -0.247    0.138 NA      0.206       0.215  
+## 4 Sex             0.0997   0.113  0.206 NA           0.00904
+## 5 Education_y     0.00129 -0.271  0.215  0.00904    NA</code></pre>
+<p>The regression models, however, do not replicate Luk and Surrain’s findings in the least. The lack of any explanatory power in any of the five models and the lack of any resemblance at all to the original models seemed unlikely, prompting me to revisit Luk and Surrain’s codebook. Here, I realised that the dependent variable in the regression models was the PoB theta for each participant—as opposed to the total score on the 10-item PoB scale. Though they had mentioned it in their analytic plan, it was not self-evident in the results description or variable labeling.</p>
 <pre class="r"><code># Multiple linear regression predicting PoB score from same demograhpic and linguistic variables as in original paper
 
 # fit1 predictors: EO
@@ -1840,122 +1823,1000 @@ fit1 &lt;- lm(PoB10_Total ~ EO, data=d2)
 fit2 &lt;- lm(PoB10_Total ~ EO + Education_y, data=d2)
 fit3 &lt;- lm(PoB10_Total ~ EO + Education_y + age_centered, data=d2)
 fit4 &lt;- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex, data=d2)
-fit5 &lt;- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex + age_centered*Sex, data=d2)
+fit5 &lt;- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex + EO*age_centered, data=d2)</code></pre>
+<pre class="r"><code>stargazer::stargazer(fit1, fit2, fit3, fit4, fit5, type = &quot;html&quot;)</code></pre>
+<table style="text-align:center">
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="5">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="5" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="5">
+PoB10_Total
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+<td>
+(3)
+</td>
+<td>
+(4)
+</td>
+<td>
+(5)
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+EO
+</td>
+<td>
+-2.038
+</td>
+<td>
+-1.776
+</td>
+<td>
+-0.755
+</td>
+<td>
+-1.015
+</td>
+<td>
+-0.689
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(2.063)
+</td>
+<td>
+(2.123)
+</td>
+<td>
+(2.104)
+</td>
+<td>
+(2.114)
+</td>
+<td>
+(2.147)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Education_y
+</td>
+<td>
+</td>
+<td>
+-0.070
+</td>
+<td>
+0.111
+</td>
+<td>
+0.099
+</td>
+<td>
+0.153
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.284)
+</td>
+<td>
+(0.287)
+</td>
+<td>
+(0.287)
+</td>
+<td>
+(0.293)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_centered
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-0.179<sup>**</sup>
+</td>
+<td>
+-0.191<sup>**</sup>
+</td>
+<td>
+-0.308<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.080)
+</td>
+<td>
+(0.080)
+</td>
+<td>
+(0.151)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sex
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+2.177
+</td>
+<td>
+2.200
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(1.998)
+</td>
+<td>
+(2.001)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+EO:age_centered
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.158
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.172)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+44.818<sup>***</sup>
+</td>
+<td>
+46.041<sup>***</sup>
+</td>
+<td>
+42.481<sup>***</sup>
+</td>
+<td>
+42.073<sup>***</sup>
+</td>
+<td>
+40.857<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1.664)
+</td>
+<td>
+(5.248)
+</td>
+<td>
+(5.321)
+</td>
+<td>
+(5.326)
+</td>
+<td>
+(5.496)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+63
+</td>
+<td>
+62
+</td>
+<td>
+62
+</td>
+<td>
+62
+</td>
+<td>
+62
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.016
+</td>
+<td>
+0.012
+</td>
+<td>
+0.090
+</td>
+<td>
+0.109
+</td>
+<td>
+0.122
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+-0.0004
+</td>
+<td>
+-0.022
+</td>
+<td>
+0.043
+</td>
+<td>
+0.046
+</td>
+<td>
+0.044
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+7.805 (df = 61)
+</td>
+<td>
+7.618 (df = 59)
+</td>
+<td>
+7.372 (df = 58)
+</td>
+<td>
+7.360 (df = 57)
+</td>
+<td>
+7.370 (df = 56)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+0.976 (df = 1; 61)
+</td>
+<td>
+0.350 (df = 2; 59)
+</td>
+<td>
+1.921 (df = 3; 58)
+</td>
+<td>
+1.742 (df = 4; 57)
+</td>
+<td>
+1.558 (df = 5; 56)
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="5" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<p>Therefore, in the following section, I adapted my replication plan and repeated the regression modelling using predicted PoB theta scores.</p>
+<p>###Exploratory analyses</p>
+<p>I attempted to compute PoB thetas in the same fashion as Luk and Surrain, using a graded response model.</p>
+<pre class="r"><code># creating dataframe with PoB responses only
+PoB &lt;- d2 %&gt;%
+  dplyr::select(c(PoB_1, PoB_2, PoB_4, PoB_6, PoB_7, PoB_8, PoB_9, PoB_10, PoB_12, PoB_13))
 
-summary(fit1)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = PoB10_Total ~ EO, data = d2)
-## 
-## Residuals:
-##  1  2 
-## -6  6 
-## 
-## Coefficients: (1 not defined because of singularities)
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)       47          6   7.833   0.0808 .
-## EO                NA         NA      NA       NA  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 8.485 on 1 degrees of freedom</code></pre>
-<pre class="r"><code>summary(fit2)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = PoB10_Total ~ EO + Education_y, data = d2)
-## 
-## Residuals:
-## ALL 2 residuals are 0: no residual degrees of freedom!
-## 
-## Coefficients: (1 not defined because of singularities)
-##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)     81.8         NA      NA       NA
-## EO                NA         NA      NA       NA
-## Education_y     -2.4         NA      NA       NA
-## 
-## Residual standard error: NaN on 0 degrees of freedom
-## Multiple R-squared:      1,  Adjusted R-squared:    NaN 
-## F-statistic:   NaN on 1 and 0 DF,  p-value: NA</code></pre>
-<pre class="r"><code>summary(fit3)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = PoB10_Total ~ EO + Education_y + age_centered, data = d2)
-## 
-## Residuals:
-## ALL 2 residuals are 0: no residual degrees of freedom!
-## 
-## Coefficients: (2 not defined because of singularities)
-##              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)      81.8         NA      NA       NA
-## EO                 NA         NA      NA       NA
-## Education_y      -2.4         NA      NA       NA
-## age_centered       NA         NA      NA       NA
-## 
-## Residual standard error: NaN on 0 degrees of freedom
-## Multiple R-squared:      1,  Adjusted R-squared:    NaN 
-## F-statistic:   NaN on 1 and 0 DF,  p-value: NA</code></pre>
-<pre class="r"><code>summary(fit4)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = PoB10_Total ~ EO + Education_y + age_centered + 
-##     Sex, data = d2)
-## 
-## Residuals:
-## ALL 2 residuals are 0: no residual degrees of freedom!
-## 
-## Coefficients: (3 not defined because of singularities)
-##              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)      81.8         NA      NA       NA
-## EO                 NA         NA      NA       NA
-## Education_y      -2.4         NA      NA       NA
-## age_centered       NA         NA      NA       NA
-## Sex                NA         NA      NA       NA
-## 
-## Residual standard error: NaN on 0 degrees of freedom
-## Multiple R-squared:      1,  Adjusted R-squared:    NaN 
-## F-statistic:   NaN on 1 and 0 DF,  p-value: NA</code></pre>
-<pre class="r"><code>summary(fit5)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = PoB10_Total ~ EO + Education_y + age_centered + 
-##     Sex + age_centered * Sex, data = d2)
-## 
-## Residuals:
-## ALL 2 residuals are 0: no residual degrees of freedom!
-## 
-## Coefficients: (4 not defined because of singularities)
-##                  Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)          81.8         NA      NA       NA
-## EO                     NA         NA      NA       NA
-## Education_y          -2.4         NA      NA       NA
-## age_centered           NA         NA      NA       NA
-## Sex                    NA         NA      NA       NA
-## age_centered:Sex       NA         NA      NA       NA
-## 
-## Residual standard error: NaN on 0 degrees of freedom
-## Multiple R-squared:      1,  Adjusted R-squared:    NaN 
-## F-statistic:   NaN on 1 and 0 DF,  p-value: NA</code></pre>
-<!-- 
+# applying grm model to PoB results (&#39;subscript out of bounds&#39; error, hence not run)
+# grm(PoB)</code></pre>
+<p>However, the data does not contain all possible response options for each item (i.e. some response options on some of the items were not selected by any of the participants). Therefore, I could not run the <code>grm</code> model, as it could not compute the threshold parameters for each response level. As a result of that, I could not compute theta values, either. In a last attempt, I adjusted the responses to a 1-5 scale, in order to obtain a rough estimate of <code>grm</code> theta estimates, in order to rerun the regression analyses.</p>
+<pre class="r"><code># creating new set of adjusted PoB response, recoded original responses to 1-5 scale (collapsing original 1 and 2 responses into single category, 1, and subtracting one from all higher categories)
+d2 &lt;- d2 %&gt;%
+  mutate(PoB_1a = ifelse(PoB_1 &lt;= 2, 1, PoB_1 - 1),
+         PoB_2a = ifelse(PoB_2 &lt;= 2, 1, PoB_2 - 1),
+         PoB_4a = ifelse(PoB_4 &lt;= 2, 1, PoB_4 - 1),
+         PoB_6a = ifelse(PoB_6 &lt;= 2, 1, PoB_6 - 1),
+         PoB_7a = ifelse(PoB_7 &lt;= 2, 1, PoB_7 - 1),
+         PoB_8a = ifelse(PoB_8 &lt;= 2, 1, PoB_8 - 1),
+         PoB_9a = ifelse(PoB_9 &lt;= 2, 1, PoB_9 - 1),
+         PoB_10a = ifelse(PoB_10 &lt;= 2, 1, PoB_10 - 1),
+         PoB_12a = ifelse(PoB_12 &lt;= 2, 1, PoB_12 - 1),
+         PoB_13a = ifelse(PoB_13 &lt;= 2, 1, PoB_13 - 1))
 
-*Side-by-side graph with original graph is ideal here*
+# creating new df with only recoded PoB responses
+PoBa &lt;- d2 %&gt;%
+  dplyr::select(c(PoB_1a, PoB_2a, PoB_4a, PoB_6a, PoB_7a, PoB_8a, PoB_9a, PoB_10a, PoB_12a, PoB_13a))
 
-###Exploratory analyses
+# running grm model and saving model fit
+PoB_grm &lt;- grm(PoBa)
 
-Any follow-up analyses desired (not required).  
+# theta estimation: computing theta estimates for each participant 
+PoB_grm_scores &lt;- ltm::factor.scores(PoB_grm, resp.patterns = PoBa)
 
+# saving thetas as vector
+PoB_theta &lt;- PoB_grm_scores$score.dat$z1
 
-
-## Discussion
-
-### Summary of Replication Attempt
-
-Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
-
-### Commentary
-
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
-
- -->
+# adding thetas vector as column to d2
+d2 &lt;- d2 %&gt;%
+  add_column(PoB_theta)</code></pre>
+<p>The same regression models with PoB theta (as opposed to sumscores) are presented below Despite the use of theta scores as the DV, the models do not reproduce Luk and Surrain’s results.</p>
+<pre class="r"><code># repeating regression analyses from confirmatory analysis with PoB thetas instead of sumscores
+fit1a &lt;- lm(PoB_theta ~ EO, data=d2)
+fit2a &lt;- lm(PoB_theta ~ EO + Education_y, data=d2)
+fit3a &lt;- lm(PoB_theta ~ EO + Education_y + age_centered, data=d2)
+fit4a &lt;- lm(PoB_theta ~ EO + Education_y + age_centered + Sex, data=d2)
+fit5a &lt;- lm(PoB_theta ~ EO + Education_y + age_centered + Sex + EO*age_centered, data=d2)</code></pre>
+<pre class="r"><code>stargazer::stargazer(fit1a, fit2a, fit3a, fit4a, fit5a, type = &quot;html&quot;)</code></pre>
+<table style="text-align:center">
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="5">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="5" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="5">
+thetas
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+<td>
+(3)
+</td>
+<td>
+(4)
+</td>
+<td>
+(5)
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+EO
+</td>
+<td>
+-0.260
+</td>
+<td>
+-0.230
+</td>
+<td>
+-0.128
+</td>
+<td>
+-0.141
+</td>
+<td>
+-0.100
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.233)
+</td>
+<td>
+(0.237)
+</td>
+<td>
+(0.238)
+</td>
+<td>
+(0.240)
+</td>
+<td>
+(0.243)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Education_y
+</td>
+<td>
+</td>
+<td>
+-0.009
+</td>
+<td>
+0.008
+</td>
+<td>
+0.008
+</td>
+<td>
+0.015
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+(0.032)
+</td>
+<td>
+(0.033)
+</td>
+<td>
+(0.033)
+</td>
+<td>
+(0.034)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age_centered
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+-0.018<sup>*</sup>
+</td>
+<td>
+-0.019<sup>**</sup>
+</td>
+<td>
+-0.035<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.009)
+</td>
+<td>
+(0.009)
+</td>
+<td>
+(0.018)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Sex
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.145
+</td>
+<td>
+0.149
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.230)
+</td>
+<td>
+(0.230)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+EO:age_centered
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+(0.020)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.156
+</td>
+<td>
+0.315
+</td>
+<td>
+-0.021
+</td>
+<td>
+-0.067
+</td>
+<td>
+-0.229
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(0.186)
+</td>
+<td>
+(0.588)
+</td>
+<td>
+(0.601)
+</td>
+<td>
+(0.609)
+</td>
+<td>
+(0.626)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+66
+</td>
+<td>
+65
+</td>
+<td>
+65
+</td>
+<td>
+65
+</td>
+<td>
+65
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+R<sup>2</sup>
+</td>
+<td>
+0.019
+</td>
+<td>
+0.015
+</td>
+<td>
+0.072
+</td>
+<td>
+0.078
+</td>
+<td>
+0.097
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Adjusted R<sup>2</sup>
+</td>
+<td>
+0.004
+</td>
+<td>
+-0.017
+</td>
+<td>
+0.027
+</td>
+<td>
+0.017
+</td>
+<td>
+0.020
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Residual Std. Error
+</td>
+<td>
+0.910 (df = 64)
+</td>
+<td>
+0.888 (df = 62)
+</td>
+<td>
+0.869 (df = 61)
+</td>
+<td>
+0.873 (df = 60)
+</td>
+<td>
+0.872 (df = 59)
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+F Statistic
+</td>
+<td>
+1.244 (df = 1; 64)
+</td>
+<td>
+0.469 (df = 2; 62)
+</td>
+<td>
+1.581 (df = 3; 61)
+</td>
+<td>
+1.272 (df = 4; 60)
+</td>
+<td>
+1.260 (df = 5; 59)
+</td>
+</tr>
+<tr>
+<td colspan="6" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="5" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<div id="summary-of-replication-attempt" class="section level3">
+<h3>Summary of Replication Attempt</h3>
+<p>The key analysis of interest was the five-predictor regression model of PoB performance (theta, not sumscore). While Luk and Surrain computed a multiple linear model of English language status, years of education, age, sex, and English language status*age predicting PoB theta scores with an <span class="math inline">\(R^2\)</span> of .24, the replication with the same model predictors only achieved an <span class="math inline">\(R^2\)</span> of .09, with age being the only significant predictor. Therefore, the replication attempt must be considered failed. Explanations for this failure to replicate are discussed in the commentary section below.</p>
+</div>
+<div id="commentary" class="section level3">
+<h3>Commentary</h3>
+<p>Key differences between the original study and the replication are:</p>
+<ul>
+<li><p>The original study’s sample was bigger by factor 6.</p></li>
+<li><p>The original study systematically oversampled parents of young children, the replication sample did not.</p></li>
+<li><p>For the replication sample, unlike for the original one, there were no selection criteria for MTurk participants to intentionally recruit a sample representative of the US population. As a result, the replication sample was, on average, more educated, more white, and had a reverse sex ratio (2:1 men:women) compared to the original sample.</p></li>
+<li><p>For the replicaiton, I did not have access to the demographic questionnaires and attention checks; the format of those elements in the replication might have altered the response patterns.</p></li>
+<li><p>The replication only used the improved 10-item PoB scale, while participants in the original study completed the initial 13-item version.</p></li>
+</ul>
+<p>In light of these differences, the failure to replicate the results is most likely due to the difference in the samples used and potentially due to the difference in the survey content. Further, having rerun Luk and Surrain’s analysis following their code on OSF produced the exact results in their paper, ruling out yet another potential explanation of diverging findings. Overall, the re-analysis of the OSF data using the code provided by the authors showed that the orginal paper’s methods are sound. This and general reservations about the timeline and circumstance of the replication effort raised by the original authors strongly suggest that the present replication effort must not be taken as a serious challenge to the original findings.</p>
 </div>
 </div>
 

@@ -11,11 +11,13 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
+  header-includes:
+    - \usepackage{dcolumn}
 ---
 
 ```{r setup, include=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, cache=TRUE)
 
 r <- getOption("repos")
 r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
@@ -94,20 +96,22 @@ The key analysis of interest is the regression modelling Luk and Surrain present
 
 While the original study recruited participants using both Qualtrics Panel and Amazon MechanicalTurk, the replication recruited only from the latter.
 Further, it was not possible to systematically oversample parents to guarantee a sufficiently large representation of parents of children exposed to both Spanish and English---as was the case in the original study.
+Years of education (`Education_y`) is a self-reported item in the replication, wherease Luk and Surrain manually recoded self-reported highest level of education to the approximately equivalent number of years.
 In light of the fact that Luk and Surrain did not provide results split by whether or not participants were parents, the effect this sampling difference produced is impossible to predict.
 Overall, the replication remained very close to the original study; hence, it was reasonable to expect very similar results.
 
-<!-- ### Methods Addendum (Post Data Collection)
-
-You can comment this section out prior to final report with data collection.
-
+### Methods Addendum (Post Data Collection)
 
 #### Actual Sample
-Sample size, demographics, data exclusions based on rules spelled out in the analysis plan.
+
+The final sample for this analysis comprised 66 individuals (24 women, 42 men), aged between 18 and 69 years ($M$ = 37.00, $SD$ = 12.30). The majority of participants was white (76 %), born in the US (87 %) , and had at least some tertiary education (83 %).
+A table with a detailed sample description can be found in the [confirmatory analysis section](#confirmatory-analysis). 
 
 #### Differences from pre-data collection methods plan
-  Any differences from what was described as the original plan, or “none”.
--->
+
+No changes were made to the data collection process or general analysis plan.
+However, I made some minor cosmetic changes to the presentation of regression models and added some lines of code to convert the demographic variables into appropriate formats (e.g. sex from numeric into factor).
+None of these changes influence the outcomes of the preregistered confirmatory analyses.
 
 ## Results
 
@@ -115,7 +119,7 @@ Sample size, demographics, data exclusions based on rules spelled out in the ana
 
 Data preparation followed the analysis plan outlined above, using the following R packages.
 
-```{r echo = TRUE}
+```{r echo = TRUE, results = 'hide'}
 library(tidyverse)
 library(readr)
 library(ltm)
@@ -126,24 +130,27 @@ library(dplyr)
 library(table1)
 library(corrr)
 library(car)
-
+library(kableExtra)
+library(sjPlot)
+library(htmltools)
+library(stargazer)
+library(ltm)
 ```
 
-First, I downloaded the Qualtrics survey results as a csv file, imported it into R, and deleted irrelevant variables.
+First, I downloaded the Qualtrics survey results as a csv file, stripped columns containing sensitive information, such as IP addresses and location data; then I imported it into R and deleted other irrelevant survey metadata variables.
 
-```{r}
+```{r results = 'hide'}
 
 # import data from csv (Qualtrics output), in R-friendly format, i.e. without unneccessary header rows
 here()
-
-d1 <- readSurvey("data/luk2019_replication_pilotdata.csv")
+d1 <- readSurvey("data/luk2019_replication_anonymous.csv")
 
 # drop irrelevant Qualtrics variables
 d1 <- d1 %>%
   dplyr::select(-c(StartDate, EndDate, Status, RecordedDate, RecipientFirstName, RecipientLastName, RecipientEmail, ExternalReference, Finished, DistributionChannel))
 ```
 
-Next, I evaluated the attention checks, recod them as 1 when passed and 0 when failed. I then excluded all participants who did not pass the attention check.
+Next, I evaluated the attention checks, recoded them as 1 when passed and 0 when failed. I then excluded all participants who did not pass the attention check.
 
 ```{r}
 
@@ -169,6 +176,7 @@ d2 <- d2 %>%
 d2 <- d2 %>%
   mutate(Total_PoB13 = SC0) %>%
   dplyr::select(-SC0)
+
 ```
 
 Then, I recoded PoB responses from string variables (labels on the Likert scale) to numerics (1-6).
@@ -210,6 +218,7 @@ d2 <- d2 %>%
 I computed a new PoB score variable (PoB10_Total), denoting the total score a shortened version of the PoB, which Luk and Surrain determined to have improved psychometric properties and which they used for subsequent analyses.
 
 ```{r}
+
 # compute new PoB10_Total
 d2 <- d2 %>%
   mutate(PoB10_Total = PoB_1 + PoB_2 + PoB_4 + PoB_6 + PoB_7 + PoB_8 + PoB_9 + PoB_10 + PoB_12 + PoB_13)
@@ -218,17 +227,17 @@ d2 <- d2 %>%
 
 After data cleaning, the resultant dataframe (d2) contains some session information, participants' PoB scores, age, sex, language background, and years of education, as well as their responses to the linguistic profile questionnaire.
 
-```{r}
-
-head(d2)
-
-```
-
 ### Confirmatory analysis
 
 Sample descriptives and between-groups differences were displayed using the *table1* package.
 
 ```{r}
+
+label(d2[["Age"]]) <- "Age in years"
+label(d2[["Sex"]]) <- "Sex (Female = 1)"
+label(d2[["Birthplace"]]) <- "Birthplace"
+label(d2[["Ethnicity"]]) <- "Ethnicity"
+label(d2[["Education"]]) <- "Highest educational level"
 
 # Sample descriptives 
 table1::table1(~Age + Sex + Birthplace + Education + Ethnicity, data = d2)
@@ -237,28 +246,41 @@ table1::table1(~Age + Sex + Birthplace + Education + Ethnicity, data = d2)
 
 All confirmatory analyses are specified in the analysis plan (see section *Analysis Plan*).
 Following a correlations table, the main analysis is a multiple linear regression, carried out using the *lm* function.
-Luk and Surrain's (2019) final model will be replicated as per the below (building all models as in the original paper, with a focus on the last model, fit5).
+Luk and Surrain's (2019) final model were replicated as per the below (building all models as in the original paper, with a focus on the last model, fit5).
 Prior to the model building, however, I converted the variable *Sex* into numeric format (female = 1) and centered *Age* at the mean (as the Luk & Surrain did).
 
 ```{r}
 
 # creating new variable, centering age at the mean
 d2 <- d2 %>%
-  mutate(age_centered = Age - 37)
+  mutate(age_centered = Age - mean(Age))
 
 # changing Sex to numeric with Female = 1 
 d2 <- d2 %>%
   mutate(Sex = if_else(Sex == "Female", 1, 0))
+```
 
+A quick look at the correlations table shows a pattern very similar to that in the original study (see Table 4 in Luk and Surrain, 2019).
+Being older and being a monolingual English-speaker are negatively related to PoB scores; higher levels of education and being female are positive related to PoB scores.
+
+
+```{r}
 # prepration for correlation tables
 # creating separate df for correlations_data
 correlations_data <- d2 %>%
-  dplyr::select(c(PoB10_Total, EO, age_centered, Sex, Education_y))
+  dplyr::select(c(PoB10_Total, EO, Age, Sex, Education_y))
 
 # creating & showing cor_df
 correlations <- corrr::correlate(correlations_data)
 correlations
+```
 
+The regression models, however, do not replicate Luk and Surrain's findings in the least.
+The lack of any explanatory power in any of the five models and the lack of any resemblance at all to the original models seemed unlikely, prompting me to revisit Luk and Surrain's codebook.
+Here, I realised that the dependent variable in the regression models was the PoB theta for each participant---as opposed to the total score on the 10-item PoB scale.
+Though they had mentioned it in their analytic plan, it was not self-evident in the results description or variable labeling.
+
+```{r}
 # Multiple linear regression predicting PoB score from same demograhpic and linguistic variables as in original paper
 
 # fit1 predictors: EO
@@ -272,41 +294,109 @@ fit1 <- lm(PoB10_Total ~ EO, data=d2)
 fit2 <- lm(PoB10_Total ~ EO + Education_y, data=d2)
 fit3 <- lm(PoB10_Total ~ EO + Education_y + age_centered, data=d2)
 fit4 <- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex, data=d2)
-fit5 <- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex + age_centered*Sex, data=d2)
-
-summary(fit1)
-summary(fit2)
-summary(fit3)
-summary(fit4)
-summary(fit5)
-
+fit5 <- lm(PoB10_Total ~ EO + Education_y + age_centered + Sex + EO*age_centered, data=d2)
 ```
 
-<!-- 
+```{r, results='asis'}
+stargazer::stargazer(fit1, fit2, fit3, fit4, fit5, type = "html")
+```
 
-*Side-by-side graph with original graph is ideal here*
+Therefore, in the following section, I adapted my replication plan and repeated the regression modelling using predicted PoB theta scores.
 
 ###Exploratory analyses
 
-Any follow-up analyses desired (not required).  
+I attempted to compute PoB thetas in the same fashion as Luk and Surrain, using a graded response model. 
 
 ```{r}
 
+# creating dataframe with PoB responses only
+PoB <- d2 %>%
+  dplyr::select(c(PoB_1, PoB_2, PoB_4, PoB_6, PoB_7, PoB_8, PoB_9, PoB_10, PoB_12, PoB_13))
 
-  
+# applying grm model to PoB results ('subscript out of bounds' error, hence not run)
+# grm(PoB)
+```
 
+However, the data does not contain all possible response options for each item (i.e. some response options on some of the items were not selected by any of the participants).
+Therefore, I could not run the `grm` model, as it could not compute the threshold parameters for each response level.
+As a result of that, I could not compute theta values, either.
+In a last attempt, I adjusted the responses to a 1-5 scale, in order to obtain a rough estimate of `grm` theta estimates, in order to rerun the regression analyses.
 
+```{r}
+
+# creating new set of adjusted PoB response, recoded original responses to 1-5 scale (collapsing original 1 and 2 responses into single category, 1, and subtracting one from all higher categories)
+d2 <- d2 %>%
+  mutate(PoB_1a = ifelse(PoB_1 <= 2, 1, PoB_1 - 1),
+         PoB_2a = ifelse(PoB_2 <= 2, 1, PoB_2 - 1),
+         PoB_4a = ifelse(PoB_4 <= 2, 1, PoB_4 - 1),
+         PoB_6a = ifelse(PoB_6 <= 2, 1, PoB_6 - 1),
+         PoB_7a = ifelse(PoB_7 <= 2, 1, PoB_7 - 1),
+         PoB_8a = ifelse(PoB_8 <= 2, 1, PoB_8 - 1),
+         PoB_9a = ifelse(PoB_9 <= 2, 1, PoB_9 - 1),
+         PoB_10a = ifelse(PoB_10 <= 2, 1, PoB_10 - 1),
+         PoB_12a = ifelse(PoB_12 <= 2, 1, PoB_12 - 1),
+         PoB_13a = ifelse(PoB_13 <= 2, 1, PoB_13 - 1))
+
+# creating new df with only recoded PoB responses
+PoBa <- d2 %>%
+  dplyr::select(c(PoB_1a, PoB_2a, PoB_4a, PoB_6a, PoB_7a, PoB_8a, PoB_9a, PoB_10a, PoB_12a, PoB_13a))
+
+# running grm model and saving model fit
+PoB_grm <- grm(PoBa)
+
+# theta estimation: computing theta estimates for each participant 
+PoB_grm_scores <- ltm::factor.scores(PoB_grm, resp.patterns = PoBa)
+
+# saving thetas as vector
+PoB_theta <- PoB_grm_scores$score.dat$z1
+
+# adding thetas vector as column to d2
+d2 <- d2 %>%
+  add_column(PoB_theta)
+```
+
+The same regression models with PoB theta (as opposed to sumscores) are presented below
+Despite the use of theta scores as the DV, the models do not reproduce Luk and Surrain's results.
+
+```{r}
+
+# repeating regression analyses from confirmatory analysis with PoB thetas instead of sumscores
+fit1a <- lm(PoB_theta ~ EO, data=d2)
+fit2a <- lm(PoB_theta ~ EO + Education_y, data=d2)
+fit3a <- lm(PoB_theta ~ EO + Education_y + age_centered, data=d2)
+fit4a <- lm(PoB_theta ~ EO + Education_y + age_centered + Sex, data=d2)
+fit5a <- lm(PoB_theta ~ EO + Education_y + age_centered + Sex + EO*age_centered, data=d2)
+```
+
+```{r, results='asis'}
+stargazer::stargazer(fit1a, fit2a, fit3a, fit4a, fit5a, type = "html")
 ```
 
 ## Discussion
 
 ### Summary of Replication Attempt
 
-Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+The key analysis of interest was the five-predictor regression model of PoB performance (theta, not sumscore).
+While Luk and Surrain computed a multiple linear model of English language status, years of education, age, sex, and English language status*age predicting PoB theta scores with an $R^2$ of .24, the replication with the same model predictors only achieved an $R^2$ of .09, with age being the only significant predictor.
+Therefore, the replication attempt must be considered failed.
+Explanations for this failure to replicate are discussed in the commentary section below.
 
 ### Commentary
 
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+Key differences between the original study and the replication are:
 
- -->
- 
+* The original study's sample was bigger by factor 6.
+
+* The original study systematically oversampled parents of young children, the replication sample did not.
+
+* For the replication sample, unlike for the original one, there were no selection criteria for MTurk participants to intentionally recruit a sample representative of the US population. As a result, the replication sample was, on average, more educated, more white, and had a reverse sex ratio (2:1 men:women) compared to the original sample. 
+
+* For the replicaiton, I did not have access to the demographic questionnaires and attention checks; the format of those elements in the replication might have altered the response patterns.
+
+* The replication only used the improved 10-item PoB scale, while participants in the original study completed the initial 13-item version.
+
+In light of these differences, the failure to replicate the results is most likely due to the difference in the samples used and potentially due to the difference in the survey content.
+Further, having rerun Luk and Surrain's analysis following their code on OSF produced the exact results in their paper, ruling out yet another potential explanation of diverging findings.
+Overall, the re-analysis of the OSF data using the code provided by the authors showed that the orginal paper's methods are sound.
+This and general reservations about the timeline and circumstance of the replication effort raised by the original authors strongly suggest that the present replication effort must not be taken as a serious challenge to the original findings.
+
